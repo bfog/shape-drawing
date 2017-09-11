@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using SwinGameSDK;
 
 namespace MyGame
@@ -33,6 +34,21 @@ namespace MyGame
         {
             return SwinGame.PointInRect(pt, X, Y, _width, _height);
         }
+
+        public override void SaveTo(StreamWriter writer)
+        {
+            base.SaveTo(writer);
+            writer.WriteLine(Width);
+            writer.WriteLine(Height);
+        }
+
+        public override void LoadFrom(StreamReader reader)
+        {
+            base.LoadFrom(reader);
+            Width = reader.ReadInteger();
+            Height = reader.ReadInteger();
+        }
+
         public int Width
         {
             get

@@ -1,5 +1,7 @@
 ﻿using System;
 using SwinGameSDK;
+using System.IO;
+using System.Collections.Generic;
 
 namespace MyGame
 {
@@ -10,11 +12,42 @@ namespace MyGame
 
         private bool _selected;
 
+        public static Dictionary<string, Type> _ShapeClassRegistry = new Dictionary<string, Type>();
+
+        public static void RegisterShape(string name, Type t) { _ShapeClassRegistry[name] = t; }
+
+        public static Shape CreateShape(string name) { return (Shape)Activator.CreateInstance(_ShapeClassRegistry[name]); }
+
+        public static string GetKey(Type t)
+        {
+            foreach(var val in _ShapeClassRegistry.Keys)
+            {
+                if (t == _ShapeClassRegistry[val])
+                    return val;
+            }
+            return null;
+        }
+
         public Shape(Color c)
         {
             _color = c;
         }
         public Shape() : this(Color.Yellow) {}
+
+        public virtual void SaveTo(StreamWriter writer)
+        {
+            writer.WriteLine(GetKey(GetType()));
+            writer.WriteLine(Color.ToArgb());
+            writer.WriteLine(X);
+            writer.WriteLine(Y);
+        }
+
+        public virtual void LoadFrom(StreamReader reader)
+        {
+            Color = Color.FromArgb(reader.ReadInteger());
+            X = reader.ReadInteger();
+            Y = reader.ReadInteger();
+        }
 
         public abstract void Draw();
 

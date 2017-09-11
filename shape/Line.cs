@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using SwinGameSDK;
 
 namespace MyGame
@@ -28,6 +29,16 @@ namespace MyGame
         public override bool IsAt(Point2D pt)
         {
             return SwinGame.PointOnLine(pt, X, Y, X + 100, Y);
+        }
+
+        public override void SaveTo(StreamWriter writer)
+        {
+            base.SaveTo(writer);
+        }
+
+        public override void LoadFrom(StreamReader reader)
+        {
+            base.LoadFrom(reader);
         }
     }
 }

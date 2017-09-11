@@ -13,6 +13,10 @@ namespace MyGame
         }
         public static void Main()
         {
+            Shape.RegisterShape("Rectangle", typeof(Rectangle));
+            Shape.RegisterShape("Circle", typeof(Circle));
+            Shape.RegisterShape("Line", typeof(Line));
+
             //Audio System
             SwinGame.OpenAudio();
 
@@ -89,6 +93,24 @@ namespace MyGame
                         Draw.RemoveShape(s);
                     }
                 }
+
+                if(SwinGame.KeyTyped(KeyCode.SKey))
+                {
+                    Draw.Save("C:/Users/Brian/Documents/TestDrawing.txt");
+                }
+
+                if(SwinGame.KeyTyped(KeyCode.OKey))
+                {
+                    try
+                    {
+                        Draw.Load("C:/Users/Brian/Documents/TestDrawing.txt");
+                    }
+                    catch(Exception e)
+                    {
+                        Console.Error.WriteLine("Error loading file: {0}", e.Message);
+                    }
+                }
+
                 //Clear the screen and draw the framerate
                 SwinGame.ClearScreen(Color.White);
                 SwinGame.DrawFramerate(0, 0);

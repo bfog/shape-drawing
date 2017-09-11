@@ -1,7 +1,7 @@
 ﻿using System;
 using SwinGameSDK;
 using System.Collections.Generic;
-
+using System.IO;
 
 namespace MyGame
 {
@@ -34,10 +34,66 @@ namespace MyGame
                        
             }
         }
+
         public void RemoveShape(Shape s)
         {
             _shapes.Remove(s);
         }
+
+        public void Save(string filename)
+        {
+            StreamWriter writer;
+
+            writer = new StreamWriter(filename);
+
+            writer.WriteLine(Background.ToArgb());
+            writer.WriteLine(ShapeCount);
+
+            try
+            {
+                foreach (Shape s in _shapes)
+                {
+                    s.SaveTo(writer);
+                }
+            }
+            finally
+            {
+                writer.Close();
+            }
+        }
+
+        public void Load(string filename)
+        {
+            StreamReader reader;
+            int count;
+            Shape s;
+            string kind;
+
+            _shapes.Clear();
+
+            reader = new StreamReader(filename);
+
+            Background = Color.FromArgb(reader.ReadInteger());
+            count = reader.ReadInteger();
+
+            try
+            {
+                for (int i = 0; i < count; i++)
+                {
+                    kind = reader.ReadLine();
+
+                    s = Shape.CreateShape(kind);
+
+                    s.LoadFrom(reader);
+                    AddShape(s);
+                }
+            }
+            finally
+            {
+                reader.Close();
+            }
+        }
+
         public List<Shape> SelectedShapes
         {
             get
@@ -71,6 +127,6 @@ namespace MyGame
         }
 
         public int ShapeCount { get { return _shapes.Count; } }
-
+       
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using SwinGameSDK;
 
 namespace MyGame
@@ -30,6 +31,19 @@ namespace MyGame
         {
             return SwinGame.PointInCircle(pt, X, Y, Radius);
         }
+
+        public override void SaveTo(StreamWriter writer)
+        {
+            base.SaveTo(writer);
+            writer.WriteLine(Radius);
+        }
+
+        public override void LoadFrom(StreamReader reader)
+        {
+            base.LoadFrom(reader);
+            Radius = reader.ReadInteger();
+        }
+
         public int Radius
         {
             get
